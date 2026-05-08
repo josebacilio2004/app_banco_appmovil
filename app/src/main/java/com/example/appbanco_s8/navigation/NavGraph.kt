@@ -155,7 +155,7 @@ fun AppNavGraph(navController: NavHostController) {
                 onLogout      = doLogout
             ) { padding ->
                 Box(Modifier.fillMaxSize().padding(padding)) {
-                    OperaScreen(token = token, navController = navController)
+                    OperaScreen(token = token, userId = userIdGlobal, navController = navController)
                 }
             }
         }
@@ -223,6 +223,62 @@ fun AppNavGraph(navController: NavHostController) {
                         token = token,
                         userId = userIdGlobal,
                         navController = navController
+                    )
+                }
+            }
+        }
+
+        composable(
+            route = Screen.HistorialRecargas.route,
+            arguments = listOf(
+                navArgument("token") { type = NavType.StringType },
+                navArgument("userId") { type = NavType.StringType }
+            )
+        ) { back ->
+            val token = back.arguments?.getString("token") ?: tokenGlobal
+            val userId = back.arguments?.getString("userId") ?: userIdGlobal
+            AppScaffold(
+                token = tokenGlobal,
+                email = emailGlobal,
+                navController = navController,
+                onLogout = doLogout
+            ) { padding ->
+                Box(Modifier.fillMaxSize().padding(padding)) {
+                    HistorialRecargasScreen(token = token, userId = userId, navController = navController)
+                }
+            }
+        }
+
+        composable(
+            route = Screen.Recarga.route,
+            arguments = listOf(
+                navArgument("token") { type = NavType.StringType },
+                navArgument("userId") { type = NavType.StringType },
+                navArgument("operadora") { type = NavType.StringType },
+                navArgument("celular") { type = NavType.StringType },
+                navArgument("monto") { type = NavType.FloatType }
+            )
+        ) { back ->
+            val token = back.arguments?.getString("token") ?: tokenGlobal
+            val userId = back.arguments?.getString("userId") ?: userIdGlobal
+            val operadora = back.arguments?.getString("operadora")?.trim() ?: ""
+            val celular = back.arguments?.getString("celular")?.trim() ?: ""
+            val monto = back.arguments?.getFloat("monto")?.toDouble() ?: 0.0
+
+            AppScaffold(
+                token = tokenGlobal,
+                email = emailGlobal,
+                navController = navController,
+                onLogout = doLogout
+            ) { padding ->
+                Box(Modifier.fillMaxSize().padding(padding)) {
+                    RecargaScreen(
+                        token = token,
+                        userId = userId,
+                        navController = navController,
+                        initialOperadora = operadora,
+                        initialCelular = celular,
+                        initialMonto = monto
                     )
                 }
             }

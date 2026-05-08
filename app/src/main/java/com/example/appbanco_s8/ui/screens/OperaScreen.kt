@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.appbanco_s8.navigation.Screen
 
 private val AzulMarino  = Color(0xFF020B18)
 private val AzulBanco   = Color(0xFF1A5DC8)
@@ -25,15 +26,16 @@ private val GrisTexto   = Color(0xFFB0B8C8)
 private val GrisSurface = Color(0xFF0D1F3C)
 
 @Composable
-fun OperaScreen(token: String, navController: NavHostController) {
+fun OperaScreen(token: String, userId: String, navController: NavHostController) {
 
-    data class OperaItem(val icon: ImageVector, val label: String)
+    data class OperaItem(val icon: ImageVector, val label: String, val route: String? = null)
 
     val operacionesCuenta = listOf(
         OperaItem(Icons.Default.SwapHoriz,        "Transferir"),
         OperaItem(Icons.Default.MoneyOff,          "Retiro sin tarjeta"),
         OperaItem(Icons.Default.Description,       "Ver estado de cuenta"),
-        OperaItem(Icons.Default.PhoneAndroid,      "Recargar celular"),
+        OperaItem(Icons.Default.PhoneAndroid,      "Recargar celular", Screen.Recarga.createRoute(token, userId)),
+        OperaItem(Icons.Default.History,           "Historial Recargas", Screen.HistorialRecargas.createRoute(token, userId)),
         OperaItem(Icons.Default.Receipt,           "Pagar servicio"),
         OperaItem(Icons.Default.CreditCard,        "Pagar tarjeta"),
         OperaItem(Icons.Default.CardGiftcard,      "Recargar tarjeta regalo"),
@@ -85,7 +87,9 @@ fun OperaScreen(token: String, navController: NavHostController) {
                         Column(
                             modifier = Modifier
                                 .weight(1f)
-                                .clickable { },
+                                .clickable { 
+                                    item.route?.let { navController.navigate(it) }
+                                },
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Box(

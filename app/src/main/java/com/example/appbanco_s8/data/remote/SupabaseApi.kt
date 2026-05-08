@@ -7,6 +7,7 @@ import retrofit2.http.Header
 import retrofit2.http.Query
 import retrofit2.http.POST
 import retrofit2.http.PATCH
+import retrofit2.http.DELETE
 import retrofit2.http.Body
 
 interface SupabaseApi {
@@ -60,7 +61,7 @@ interface SupabaseApi {
         @Query("select")         select: String = "*"
     ): Response<List<Tarjeta>>
 
-    @GET("rest/v1/prestamos")
+    @GET("rest/v1/solicitudes_prestamo")
     suspend fun getPrestamos(
         @Header("Authorization") token:  String,
         @Query("select")         select: String = "*"
@@ -73,4 +74,27 @@ interface SupabaseApi {
         @Query("order")          order:  String = "fecha.desc",
         @Query("limit")          limit:  Int    = 20
     ): Response<List<Pago>>
+
+    @GET("rest/v1/recargas")
+    suspend fun getRecargas(
+        @Header("Authorization") token: String,
+        @Query("user_id") userId: String,
+        @Query("select") select: String = "*",
+        @Query("order") order: String = "fecha.desc",
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0,
+        @Query("operadora") operadora: String? = null
+    ): Response<List<Recarga>>
+
+    @POST("rest/v1/recargas")
+    suspend fun createRecarga(
+        @Header("Authorization") token: String,
+        @Body recarga: RecargaRequest
+    ): Response<Void>
+
+    @DELETE("rest/v1/recargas")
+    suspend fun deleteRecarga(
+        @Header("Authorization") token: String,
+        @Query("id") idFilter: String // format: "eq.UUID"
+    ): Response<Void>
 }

@@ -28,4 +28,11 @@ sealed class Screen(val route: String) {
     object Deposito  : Screen("deposito/{token}") {
         fun createRoute(token: String) = "deposito/$token"
     }
+    object HistorialRecargas : Screen("historial_recargas/{token}/{userId}") {
+        fun createRoute(token: String, userId: String) = "historial_recargas/$token/$userId"
+    }
+    object Recarga : Screen("recarga/{token}/{userId}/{operadora}/{celular}/{monto}") {
+        fun createRoute(token: String, userId: String, operadora: String = " ", celular: String = " ", monto: Double = 0.0) = 
+            "recarga/$token/$userId/$operadora/$celular/$monto"
+    }
 }
